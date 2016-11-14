@@ -10,7 +10,10 @@ class ProfitCalc(object):
         if code in self.content.keys():
             sum_price = self.content[code]['PRICE'] * self.content[code]['QTY'] + price
             self.content[code]['QTY'] += qty
-            self.content[code]['PRICE'] = sum_price / self.content[code]['QTY']
+            if self.content[code]['QTY'] == 0:
+                del self.content[code]
+            else:
+                self.content[code]['PRICE'] = sum_price / self.content[code]['QTY']
         else:
             self.content[code] = {'QTY': qty, 'PRICE': price}
     
