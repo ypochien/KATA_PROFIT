@@ -20,6 +20,14 @@ class ProfitCalc(object):
     
     def summary(self):
         return self.content
+    
+    def calc_profit(self, code, quote):
+        profit = 0
+        if code in self.content.keys():
+            item = self.content[code]
+            profit = (quote - item['PRICE']) * item['QTY'] * 200
+        
+        return profit
 
 
 class ProfitTestCase(unittest.TestCase):
