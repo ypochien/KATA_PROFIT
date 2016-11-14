@@ -7,15 +7,16 @@ class ProfitCalc(object):
         self.content = {}
     
     def add(self, code, qty, price):
+        item = {'QTY': qty, 'PRICE': price}
         if code in self.content.keys():
-            sum_price = self.content[code]['PRICE'] * self.content[code]['QTY'] + price
-            self.content[code]['QTY'] += qty
-            if self.content[code]['QTY'] == 0:
+            sum_price = self.content[code]['PRICE'] * self.content[code]['QTY']
+            item['QTY'] = self.content[code]['QTY'] + qty
+            if item['QTY'] == 0:
                 del self.content[code]
+                return
             else:
-                self.content[code]['PRICE'] = sum_price / self.content[code]['QTY']
-        else:
-            self.content[code] = {'QTY': qty, 'PRICE': price}
+                item['PRICE'] = (sum_price + price * qty) / item['QTY']
+        self.content[code] = item
     
     def summary(self):
         return self.content
@@ -30,9 +31,6 @@ class ProfitTestCase(unittest.TestCase):
         actual = sut.summary()
         self.assertDictEqual(expect, actual)
         
-        if __name__ == '__main__':
-            unittest.main()
-    
     
     def test_收到成交回報的紀錄商品_口數_價格剛好沒有部位(self):
         sut = ProfitCalc()
@@ -43,5 +41,5 @@ class ProfitTestCase(unittest.TestCase):
         actual = sut.summary()
         self.assertDictEqual(expect, actual)
         
-        if __name__ == '__main__':
-            unittest.main()
+    if __name__ == '__main__':
+        unittest.main()
