@@ -1,11 +1,17 @@
 # coding=UTF-8
+import json
 import unittest
 
 
 class ProfitCalc(object):
     def __init__(self):
         self.content = {}
-    
+        self.__load_config('CodeUnit.json')
+
+    def __load_config(self, config_json='./config.json'):
+        with open(config_json) as fd_json:
+            self.CodeUnit = json.load(fd_json)
+
     def add(self, code, qty, price):
         item = {'QTY': qty, 'PRICE': price}
         if code in self.content.keys():
@@ -25,7 +31,7 @@ class ProfitCalc(object):
         profit = 0
         if code in self.content.keys():
             item = self.content[code]
-            profit = (quote - item['PRICE']) * item['QTY'] * 200
+            profit = (quote - item['PRICE']) * item['QTY'] * self.CodeUnit[code]
         
         return profit
 
