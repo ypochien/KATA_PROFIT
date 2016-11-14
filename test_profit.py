@@ -29,5 +29,16 @@ class ProfitTestCase(unittest.TestCase):
         
         if __name__ == '__main__':
             unittest.main()
-
-
+    
+    
+    def test_收到成交回報的紀錄商品_口數_價格剛好沒有部位(self):
+        sut = ProfitCalc()
+        sut.add('TXO', 1, 9000)
+        sut.add('TXO', 1, 9002)
+        sut.add('TXO', -2, 9000)
+        expect = {}
+        actual = sut.summary()
+        self.assertDictEqual(expect, actual)
+        
+        if __name__ == '__main__':
+            unittest.main()
