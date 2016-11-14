@@ -27,19 +27,26 @@ class ProfitTestCase(unittest.TestCase):
         sut = ProfitCalc()
         sut.add('TXO', 1, 9000)
         sut.add('TXO', 1, 9002)
-        expect = {"TXO": {'QTY': 2, 'PRICE': (9000 + 9002) / 2}}
+        expected = {"TXO": {'QTY': 2, 'PRICE': (9000 + 9002) / 2}}
         actual = sut.summary()
-        self.assertDictEqual(expect, actual)
-        
+        self.assertDictEqual(expected, actual)
     
     def test_收到成交回報的紀錄商品_口數_價格剛好沒有部位(self):
         sut = ProfitCalc()
         sut.add('TXO', 1, 9000)
         sut.add('TXO', 1, 9002)
         sut.add('TXO', -2, 9000)
-        expect = {}
+        expected = {}
         actual = sut.summary()
-        self.assertDictEqual(expect, actual)
-        
+        self.assertDictEqual(expected, actual)
+    
+    def test_報價變動_能顯示損益變化(self):
+        sut = ProfitCalc()
+        sut.add('TXO', 1, 9000)
+        sut.add('TXO', 1, 9000)
+        actual = sut.calc_profit('TXO', 9010)
+        expected = (9010 - 9000) * 2 * 200  # (Quote - AvgPrice) * QTY * 200
+        self.assertEqual(expected, actual)
+    
     if __name__ == '__main__':
         unittest.main()
